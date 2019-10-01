@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return view('contenido/contenido');
 });
+
+Route::get('/categoria', 'CategoriaControlller@index');
