@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Categoria;
+//use Illuminate\Support\Facades\DB;
+
 class CategoriaController extends Controller
 {
     /**
@@ -12,9 +14,10 @@ class CategoriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categorias = Categoria::all();
+        //if(!$request->ajax()) return redirect('/');
+        $categorias = Caetgoria::paginate(2);
         return $categorias;
     }
 
@@ -23,6 +26,7 @@ class CategoriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
    
     /**
      * Store a newly created resource in storage.
@@ -32,7 +36,12 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!$request->ajax()) return redirect('/');
+        $categoria = new Categoria();
+        $categoria->nombre=$request->nombre;
+        $categoria->descripcion=$request->descripcion;
+        $categoria->condicion='1';
+        $categoria->save();
     }
 
     /**
@@ -60,16 +69,26 @@ class CategoriaController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        if(!$request->ajax()) return redirect('/');
+        $categoria = Categoria::findOrFail($request->id);
+        $categoria->nombre=$request->nombre;
+        $categoria->descripcion=$request->descripcion;
+        $categoria->condicion='1';
+        $categoria->save();
     }
 
     public function desactivar(Request $request)
     {
-        //
+        if(!$request->ajax()) return redirect('/');
+        $categoria = Categoria::findOrFail($request->id);
+        $categoria->condicion='0';
+        $categoria->save();
     }
     public function activar(Request $request)
     {
-        //
+        $categoria = Categoria::findOrFail($request->id);
+        $categoria->condicion='1';
+        $categoria->save();
     }
     /**
      * Remove the specified resource from storage.
